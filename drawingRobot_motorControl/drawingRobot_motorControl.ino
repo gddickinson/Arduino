@@ -181,6 +181,32 @@ void set_left_value(String the_string){
   }
 }
 
+//Clock
+void set_clock_value(String the_string){
+  if(the_string.substring(0,1) == "K"){
+    char temp[20];
+    the_string.substring(1).toCharArray(temp, 19);
+    int k_val = atoi(temp);
+    newmotor1 = -k_val;
+    newmotor2 = k_val;
+    newmotor3 = k_val;
+    newmotor4 = k_val;
+  }
+}
+
+//CounterClock
+void set_counter_value(String the_string){
+  if(the_string.substring(0,1) == "J"){
+    char temp[20];
+    the_string.substring(1).toCharArray(temp, 19);
+    int j_val = atoi(temp);
+    newmotor1 = j_val;
+    newmotor2 = -j_val;
+    newmotor3 = -j_val;
+    newmotor4 = -j_val;
+  }
+}
+
 //All stop
 void set_exit_value(String the_string){
   if(the_string.substring(0,1) == "X"){
@@ -204,6 +230,8 @@ void handle_command(String readString){
   set_right_value(readString);
   set_left_value(readString);
   set_four_value(readString); 
+  set_counter_value(readString); 
+  set_clock_value(readString); 
 
   // Here you can send the values back to your Computer and read them on the Processing terminal.
   // Sending these values over Xbee can take slow the sketch down, so I comment them out after testing. 
