@@ -1,7 +1,8 @@
+
 //Responds to serial commands formatted $L255Z (Left motor forward 255), $R255Z (right motor forward 255)
+#include <Adafruit_PWMServoDriver.h>
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
-#include "utility/Adafruit_PWMServoDriver.h"
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 #include <Servo.h> 
@@ -147,17 +148,38 @@ void set_forward_value(String the_string){
   }
 }
 
-//Backward
+//Reverse
 void set_backward_value(String the_string){
-  if(the_string.substring(0,1) == "B"){
+  if(the_string.substring(0,1) == "V"){
     char temp[20];
     the_string.substring(1).toCharArray(temp, 19);
-    int b_val = atoi(temp);
-    newmotor1 = -b_val;
-    newmotor3 = -b_val;
+    int v_val = atoi(temp);
+    newmotor1 = -v_val;
+    newmotor3 = -v_val;
   }
 }
 
+//Right
+void set_right_value(String the_string){
+  if(the_string.substring(0,1) == "R"){
+    char temp[20];
+    the_string.substring(1).toCharArray(temp, 19);
+    int r_val = atoi(temp);
+    newmotor2 = r_val;
+    newmotor4 = -r_val;
+  }
+}
+
+//Left
+void set_left_value(String the_string){
+  if(the_string.substring(0,1) == "L"){
+    char temp[20];
+    the_string.substring(1).toCharArray(temp, 19);
+    int l_val = atoi(temp);
+    newmotor2 = -l_val;
+    newmotor4 = l_val;
+  }
+}
 
 //All stop
 void set_exit_value(String the_string){
@@ -179,22 +201,24 @@ void handle_command(String readString){
   set_exit_value(readString);
   set_forward_value(readString);
   set_backward_value(readString);
+  set_right_value(readString);
+  set_left_value(readString);
   set_four_value(readString); 
 
   // Here you can send the values back to your Computer and read them on the Processing terminal.
   // Sending these values over Xbee can take slow the sketch down, so I comment them out after testing. 
   
-//   Serial.print("left: ");
-//   Serial.print(newLeft);
+//   Serial.print("newmotor1: ");
+//   Serial.print(newmotor1);
 //   Serial.print("     ");
-//   Serial.print("right: ");
-//   Serial.print(newRight);
+//   Serial.print("newmotor2: ");
+//   Serial.print(newmotor2);
 //   Serial.println("     "); 
-//   Serial.print("slider: ");
-//   Serial.print(newSlider);
+//   Serial.print("newmotor3: ");
+//   Serial.print(newmotor3);
 //   Serial.println("     ");
-//   Serial.print("arm: ");
-//   Serial.print(newArm);
+//   Serial.print("newmotor4: ");
+//   Serial.print(newmotor4);
 //   Serial.println("     ");    
 
 }
