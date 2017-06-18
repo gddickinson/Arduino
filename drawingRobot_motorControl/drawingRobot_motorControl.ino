@@ -7,22 +7,22 @@
 #include <Servo.h> 
 
 
-int left = 1;
-int right = 2;
-int slider = 3;
-int arm = 4;
+int motor1 = 1;
+int motor2 = 2;
+int motor3 = 3;
+int motor4 = 4;
 
 Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
-Adafruit_DCMotor *myMotor1 = AFMS.getMotor(left);
-Adafruit_DCMotor *myMotor2 = AFMS.getMotor(right);
-Adafruit_DCMotor *myMotor3 = AFMS.getMotor(slider);
-Adafruit_DCMotor *myMotor4 = AFMS.getMotor(arm);
+Adafruit_DCMotor *myMotor1 = AFMS.getMotor(motor1);
+Adafruit_DCMotor *myMotor2 = AFMS.getMotor(motor2);
+Adafruit_DCMotor *myMotor3 = AFMS.getMotor(motor3);
+Adafruit_DCMotor *myMotor4 = AFMS.getMotor(motor4);
 
 //for serial control
-int newLeft = 0;
-int newRight = 0;
-int newSlider = 0;
-int newArm = 0;
+int newmotor1= 0;
+int newmotor2 = 0;
+int newmotor3 = 0;
+int newmotor4 = 0;
 int deadband = 5;
 
 //Sets characters to mark start and end of message
@@ -73,20 +73,20 @@ void loop() {
   } 
 
 
-  // first determine direction for the left-side motor
-    motorSetSpeed(newLeft,1);
+  // first determine direction for motor1
+    motorSetSpeed(newmotor1,1);
     delay(25);
 
-  // then determine direction for the  right-side motor
-    motorSetSpeed(newRight,2);
+  // then determine direction for motor2
+    motorSetSpeed(newmotor2,2);
     delay(25);
 
-  // then determine direction for the  slider motor
-    motorSetSpeed(newSlider,3);
+  // then determine direction for motor3
+    motorSetSpeed(newmotor3,3);
     delay(25);
 
-  // then determine direction for the  arm motor
-    motorSetSpeed(newArm,4);
+  // then determine direction for motor4
+    motorSetSpeed(newmotor4,4);
     delay(25);
 
 
@@ -94,44 +94,56 @@ void loop() {
 
 }
 
-//Left motor
-void set_left_value(String the_string){
-  if(the_string.substring(0,1) == "L"){
+//motor1
+void set_one_value(String the_string){
+  if(the_string.substring(0,1) == "A"){
     char temp[20];
     the_string.substring(1).toCharArray(temp, 19);
-    int l_val = atoi(temp);
-    newLeft = l_val;
+    int A_val = atoi(temp);
+    newmotor1 = A_val;
   }
 }
 
 
-//Right motor
-void set_right_value(String the_string){
-  if(the_string.substring(0,1) == "R"){
+//motor2
+void set_two_value(String the_string){
+  if(the_string.substring(0,1) == "B"){
     char temp[20];
     the_string.substring(1).toCharArray(temp, 19);
-    int r_val = atoi(temp);
-    newRight = r_val;
+    int B_val = atoi(temp);
+    newmotor2 = B_val;
   }
 }
 
-//Slider
-void set_slider_value(String the_string){
-  if(the_string.substring(0,1) == "S"){
+//motor3
+void set_three_value(String the_string){
+  if(the_string.substring(0,1) == "C"){
     char temp[20];
     the_string.substring(1).toCharArray(temp, 19);
-    int s_val = atoi(temp);
-    newSlider = s_val;
+    int C_val = atoi(temp);
+    newmotor3 = C_val;
   }
 }
+
+//motor4
+void set_four_value(String the_string){
+  if(the_string.substring(0,1) == "D"){
+    char temp[20];
+    the_string.substring(1).toCharArray(temp, 19);
+    int D_val = atoi(temp);
+    newmotor4 = D_val;
+  }
+}
+
+
 //Forward
 void set_forward_value(String the_string){
   if(the_string.substring(0,1) == "F"){
     char temp[20];
     the_string.substring(1).toCharArray(temp, 19);
     int f_val = atoi(temp);
-    newLeft = f_val;
-    newRight = f_val;
+    newmotor1 = f_val;
+    newmotor3 = f_val;
   }
 }
 
@@ -141,18 +153,8 @@ void set_backward_value(String the_string){
     char temp[20];
     the_string.substring(1).toCharArray(temp, 19);
     int b_val = atoi(temp);
-    newLeft = -b_val;
-    newRight = -b_val;
-  }
-}
-
-//Arm 
-void set_arm_value(String the_string){
-  if(the_string.substring(0,1) == "A"){
-    char temp[20];
-    the_string.substring(1).toCharArray(temp, 19);
-    int a_val = atoi(temp);
-    newArm = a_val;
+    newmotor1 = -b_val;
+    newmotor3 = -b_val;
   }
 }
 
@@ -160,10 +162,10 @@ void set_arm_value(String the_string){
 //All stop
 void set_exit_value(String the_string){
   if(the_string.substring(0,1) == "X"){
-    newSlider = 0;
-    newLeft = 0;
-    newRight = 0;
-    newArm = 0;
+    newmotor1 = 0;
+    newmotor2 = 0;
+    newmotor3 = 0;
+    newmotor4 = 0;
   }
 }
 
@@ -171,13 +173,13 @@ void set_exit_value(String the_string){
 
 void handle_command(String readString){
 
-  set_left_value(readString);
-  set_right_value(readString);
-  set_slider_value(readString);
+  set_one_value(readString);
+  set_two_value(readString);
+  set_three_value(readString);
   set_exit_value(readString);
   set_forward_value(readString);
   set_backward_value(readString);
-  set_arm_value(readString); 
+  set_four_value(readString); 
 
   // Here you can send the values back to your Computer and read them on the Processing terminal.
   // Sending these values over Xbee can take slow the sketch down, so I comment them out after testing. 
